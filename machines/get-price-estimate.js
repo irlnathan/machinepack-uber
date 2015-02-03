@@ -39,6 +39,9 @@ module.exports = {
     error: {
       description: 'Unexpected error occurred.'
     },
+    rateLimitExceeded: {
+      description: 'The rate limit has been exceeded.'
+    },
     success: {
       description: 'Returns an estimated price range for each product offered at a given location.',
       example: [{
