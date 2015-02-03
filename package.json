@@ -1,0 +1,30 @@
+{
+  "name": "machinepack-uber",
+  "version": "0.1.0",
+  "description": "Communicate with the Uber API to get price estimates, time estimates, etc.",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha -b"
+  },
+  "keywords": [
+    "Uber",
+    "machines",
+    "machinepack"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "machine": "^2.0.0",
+    "machinepack-http": "^0.2.3",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  },
+  "machinepack": {
+    "friendlyName": "Uber",
+    "machineDir": "machines/",
+    "machines": [
+      "get-price-estimate"
+    ]
+  }
+}
