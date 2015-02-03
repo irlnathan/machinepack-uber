@@ -88,6 +88,10 @@ module.exports = {
   },
   fn: function(inputs, exits) {
 
+    var util = require('util');
+    var URL = require('url');
+    var QS = require('querystring');
+    var _ = require('lodash');
     var Http = require('machinepack-http');
 
     // The Uber API URL setup
@@ -113,7 +117,7 @@ module.exports = {
           responseBody = JSON.parse(httpResponse.body);
           console.log(responseBody);
         } catch (e) {
-          return exits.error('Unexpected response from YouTube API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
+          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
         }
 
         return exits.success(result);
@@ -124,7 +128,7 @@ module.exports = {
 
         try {
           var responseBody = JSON.parse(httpResponse.body);
-          if (httpResponse.status === 403 && _.any(responseBody.error.errors, {
+          if (httpResponse.status === 429 && _.any(responseBody.error.errors, {
               reason: 'rateLimitExceeded'
             })) {
             return exits.rateLimitExceeded();
@@ -132,7 +136,7 @@ module.exports = {
           // Unknown youtube error
           return exits.error(httpResponse);
         } catch (e) {
-          return exits.error('Unexpected response from YouTube API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
+          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
         }
 
       },
