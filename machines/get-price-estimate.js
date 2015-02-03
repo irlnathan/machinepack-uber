@@ -40,20 +40,18 @@ module.exports = {
       description: 'Unexpected error occurred.'
     },
     success: {
-      description: ' Returns an estimated price range for each product offered at a given location.',
-      example: {
-        prices: [{
-          product_id: '08f17084-23fd-4103-aa3e-9b660223934b',
-          currency_code: 'USD',
-          display_name: 'UberBLACK',
-          estimate: '$23-29',
-          low_estimate: 23,
-          high_estimate: 29,
-          surge_multiplier: 1,
-          duration: 640,
-          distance: 5.34
-        }]
-      }
+      description: 'Returns an estimated price range for each product offered at a given location.',
+      example: [{
+        product_id: '08f17084-23fd-4103-aa3e-9b660223934b',
+        currency_code: 'USD',
+        display_name: 'UberBLACK',
+        estimate: '$23-29',
+        low_estimate: 23,
+        high_estimate: 29,
+        surge_multiplier: 1,
+        duration: 640,
+        distance: 5.34
+      }]
     }
   },
   fn: function(inputs, exits) {
@@ -88,7 +86,11 @@ module.exports = {
           return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
         }
 
-        return exits.success(result);
+        if (!result.prices) {
+          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null));
+        }
+
+        return exits.success(result.prices);
 
       },
       // Non-2xx status code returned from server
