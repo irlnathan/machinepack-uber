@@ -78,19 +78,17 @@ module.exports = {
 
         // Parse response body and build up result.
         var responseBody;
-        var result;
         try {
           responseBody = JSON.parse(httpResponse.body);
-          console.log(responseBody);
+
+          if (!responseBody.prices) {
+            return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null));
+          }
         } catch (e) {
           return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
         }
 
-        if (!result.prices) {
-          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null));
-        }
-
-        return exits.success(result.prices);
+        return exits.success(responseBody.prices);
 
       },
       // Non-2xx status code returned from server
