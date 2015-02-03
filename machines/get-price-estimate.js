@@ -45,13 +45,13 @@ module.exports = {
     success: {
       description: 'Returns an estimated price range for each product offered at a given location.',
       example: [{
-        product_id: '08f17084-23fd-4103-aa3e-9b660223934b',
-        currency_code: 'USD',
-        display_name: 'UberBLACK',
+        productId: '08f17084-23fd-4103-aa3e-9b660223934b',
+        currencyCode: 'USD',
+        displayName: 'UberBLACK',
         estimate: '$23-29',
-        low_estimate: 23,
-        high_estimate: 29,
-        surge_multiplier: 1,
+        lowEstimate: 23,
+        highEstimate: 29,
+        surgeMultiplier: 1,
         duration: 640,
         distance: 5.34
       }]
@@ -85,11 +85,28 @@ module.exports = {
           responseBody = JSON.parse(httpResponse.body);
 
           if (!responseBody.prices) {
-            return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null));
+            return exits.error('Unexpected response from Uber API:\n' + util.inspect(responseBody, false, null));
           }
         } catch (e) {
-          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
+          return exits.error('Unexpected response from Uber API:\n' + util.inspect(responseBody, false, null) + '\nParse error:\n' + util.inspect(e));
         }
+
+        responseBody.prices = _.reduce(responseBody.prices, function(memo, priceMetadata) {
+          memo.push({
+            productId: priceMetadata.product_id,
+            currencyCode: priceMetadata.currency_code,
+            displayName: priceMetadata.display_name,
+            estimate: priceMetadata.estimate,
+            lowEstimate: priceMetadata.low_estimate,
+            highEstimate: priceMetadata.high_estimate,
+            surgeMultiplier: priceMetadata.surge_multiplier,
+            duration: priceMetadata.duration,
+            distance: priceMetadata.distance 
+          });
+          return memo;
+        }, []);
+
+        console.log("response: ", responseBody.prices);
 
         return exits.success(responseBody.prices);
 
@@ -107,7 +124,7 @@ module.exports = {
           // Unknown youtube error
           return exits.error(httpResponse);
         } catch (e) {
-          return exits.error('Unexpected response from Uber API:\n'+util.inspect(responseBody, false, null)+'\nParse error:\n'+util.inspect(e));
+          return exits.error('Unexpected response from Uber API:\n' + util.inspect(responseBody, false, null) + '\nParse error:\n' + util.inspect(e));
         }
 
       },
