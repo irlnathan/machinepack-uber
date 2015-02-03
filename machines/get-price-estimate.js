@@ -42,16 +42,16 @@ module.exports = {
     success: {
       description: ' Returns an estimated price range for each product offered at a given location.',
       example: {
-        "prices": [{
-          "product_id": "08f17084-23fd-4103-aa3e-9b660223934b",
-          "currency_code": "USD",
-          "display_name": "UberBLACK",
-          "estimate": "$23-29",
-          "low_estimate": 23,
-          "high_estimate": 29,
-          "surge_multiplier": 1,
-          "duration": 640,
-          "distance": 5.34
+        prices: [{
+          product_id: '08f17084-23fd-4103-aa3e-9b660223934b',
+          currency_code: 'USD',
+          display_name: 'UberBLACK',
+          estimate: '$23-29',
+          low_estimate: 23,
+          high_estimate: 29,
+          surge_multiplier: 1,
+          duration: 640,
+          distance: 5.34
         }]
       }
     }
@@ -62,11 +62,9 @@ module.exports = {
     var _ = require('lodash');
     var Http = require('machinepack-http');
 
-    // The Uber API URL setup
-    var BASE_URL = 'https://api.uber.com';
 
     Http.sendHttpRequest({
-      baseUrl: BASE_URL,
+      baseUrl: 'https://api.uber.com',
       url: '/v1/estimates/price',
       method: 'get',
       params: {
