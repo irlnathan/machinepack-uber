@@ -68,14 +68,14 @@ module.exports = {
     Http.sendHttpRequest({
       baseUrl: BASE_URL,
       url: '/v1/estimates/price',
+      method: 'get',
       params: {
         server_token: inputs.apiKey,
         start_latitude: inputs.startLatitude,
         start_longitude: inputs.startLongitude,
         end_latitude: inputs.endLatitude,
         end_longitude: inputs.endLongitude
-      },
-      method: 'get',
+      }
     }).exec({
       // OK.
       success: function(httpResponse) {
