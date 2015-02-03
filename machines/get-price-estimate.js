@@ -13,23 +13,23 @@ module.exports = {
         extendedDescription: ''
       }
     },
-    start_latitude: {
-      example: '37.623908',
+    startLatitude: {
+      example: 37.623908,
       description: 'Latitude component of start location.',
       required: true
     },
-    end_latitude: {
-      example: '37.623908',
-      description: 'Latitude component of end location.',
-      required: true
-    },
-    start_longitude: {
-      example: '-122.381592',
+    startLongitude: {
+      example: -122.381592,
       description: 'Longitude component of start location.',
       required: true
     },
-    end_longitude: {
-      example: '-122.401213',
+    endLatitude: {
+      example: 37.623908,
+      description: 'Latitude component of end location.',
+      required: true
+    },
+    endLongitude: {
+      example: -122.401213,
       description: 'Longitude component of end location.',
       required: true
     }
@@ -52,36 +52,6 @@ module.exports = {
           "surge_multiplier": 1,
           "duration": 640,
           "distance": 5.34
-        }, {
-          "product_id": "9af0174c-8939-4ef6-8e91-1a43a0e7c6f6",
-          "currency_code": "USD",
-          "display_name": "UberSUV",
-          "estimate": "$36-44",
-          "low_estimate": 36,
-          "high_estimate": 44,
-          "surge_multiplier": 1.25,
-          "duration": 640,
-          "distance": 5.34
-        }, {
-          "product_id": "aca52cea-9701-4903-9f34-9a2395253acb",
-          "currency_code": null,
-          "display_name": "uberTAXI",
-          "estimate": "Metered",
-          "low_estimate": null,
-          "high_estimate": null,
-          "surge_multiplier": 1,
-          "duration": 640,
-          "distance": 5.34
-        }, {
-          "product_id": "a27a867a-35f4-4253-8d04-61ae80a40df5",
-          "currency_code": "USD",
-          "display_name": "uberX",
-          "estimate": "$15",
-          "low_estimate": 15,
-          "high_estimate": 15,
-          "surge_multiplier": 1,
-          "duration": 640,
-          "distance": 5.34
         }]
       }
     }
@@ -89,8 +59,6 @@ module.exports = {
   fn: function(inputs, exits) {
 
     var util = require('util');
-    var URL = require('url');
-    var QS = require('querystring');
     var _ = require('lodash');
     var Http = require('machinepack-http');
 
@@ -99,12 +67,14 @@ module.exports = {
 
     Http.sendHttpRequest({
       baseUrl: BASE_URL,
-      url:
-      '/v1/estimates/price?server_token='+inputs.apiKey+
-      '&start_latitude='+inputs.start_latitude+
-      '&end_latitude='+inputs.end_latitude+
-      '&start_longitude='+inputs.start_longitude+
-      '&end_longitude='+inputs.end_longitude,
+      url: '/v1/estimates/price',
+      params: {
+        server_token: inputs.apiKey,
+        start_latitude: inputs.startLatitude,
+        start_longitude: inputs.startLongitude,
+        end_latitude: inputs.endLatitude,
+        end_longitude: inputs.endLongitude
+      },
       method: 'get',
     }).exec({
       // OK.
