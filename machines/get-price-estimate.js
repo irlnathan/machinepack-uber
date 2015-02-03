@@ -42,6 +42,15 @@ module.exports = {
     rateLimitExceeded: {
       description: 'The rate limit has been exceeded.'
     },
+    tooFar: {
+      description: 'Distance between two points exceeds 100 miles.'
+    },
+    invalidApiKey: {
+      description: 'Invalid api key.'
+    },
+    noPriceAvail: {
+      description: 'There is no available price for this location.'
+    },
     success: {
       description: 'Returns an estimated price range for each product offered at a given location.',
       example: [{
@@ -84,6 +93,10 @@ module.exports = {
         try {
           responseBody = JSON.parse(httpResponse.body);
 
+          if (_.isEmpty(responseBody.prices)) {
+            return exits.noPriceAvail('There is no available price for this loctaion.');
+          }
+
           if (!responseBody.prices) {
             return exits.error('Unexpected response from Uber API:\n' + util.inspect(responseBody, false, null));
           }
@@ -106,7 +119,6 @@ module.exports = {
           return memo;
         }, []);
 
-        console.log("response: ", responseBody.prices);
 
         return exits.success(responseBody.prices);
 
@@ -116,12 +128,19 @@ module.exports = {
 
         try {
           var responseBody = JSON.parse(httpResponse.body);
+  
+          if (httpResponse.status === 401) {
+            return exits.invalidApiKey('Invalid api key.');
+          }
+          if (httpResponse.status === 422) {
+            return exits.tooFar('Distance between two points exceeds 100 miles.');
+          }
           if (httpResponse.status === 429 && _.any(responseBody.error.errors, {
               reason: 'rateLimitExceeded'
             })) {
             return exits.rateLimitExceeded();
           }
-          // Unknown youtube error
+          // Unknown uber error
           return exits.error(httpResponse);
         } catch (e) {
           return exits.error('Unexpected response from Uber API:\n' + util.inspect(responseBody, false, null) + '\nParse error:\n' + util.inspect(e));
