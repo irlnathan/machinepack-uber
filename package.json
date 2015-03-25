@@ -18,12 +18,14 @@
     "lodash": "^2.4.1"
   },
   "repository": {
+    "type": "git",
     "url": "https://github.com/irlnathan/machinepack-uber.git"
   },
   "devDependencies": {
     "mocha": "^2.1.0"
   },
   "machinepack": {
+    "iconSrc": "https://s3-us-west-1.amazonaws.com/machinepack-icons/machinepack_uber.png",
     "friendlyName": "Uber",
     "machineDir": "machines/",
     "machines": [
